@@ -12,9 +12,7 @@ LOCAL_SRC_FILES := AndFlmsg_Fldigi_interface.cpp fldigi/modem.cxx \
 			fldigi/fft/fft.cxx \
 			fldigi/dominoex/dominoex.cxx fldigi/dominoex/dominovar.cxx \
 			fldigi/thor/thor.cxx fldigi/thor/thorvaricode.cxx \
-			fldigi/olivia/olivia.cxx \
-			fldigi/libsamplerate/samplerate.c fldigi/libsamplerate/src_linear.c \
-			fldigi/libsamplerate/src_sinc.c fldigi/libsamplerate/src_zoh.c 
+			fldigi/olivia/olivia.cxx 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/fldigi/include
 include $(BUILD_SHARED_LIBRARY)
 

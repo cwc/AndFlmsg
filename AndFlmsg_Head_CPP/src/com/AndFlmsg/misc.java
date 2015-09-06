@@ -17,6 +17,23 @@
 package com.AndFlmsg;
 
 public class misc {
+    
+    public static int grayencode(int data)
+//unsigned char graydecode(unsigned char data)
+    {
+        int bits = data;
+
+        bits ^= data >> 1;
+        bits ^= data >> 2;
+        bits ^= data >> 3;
+        bits ^= data >> 4;
+        bits ^= data >> 5;
+        bits ^= data >> 6;
+        bits ^= data >> 7;
+
+        return bits;
+    }
+
 
 	public static double decayavg(double average, double input, double weight) {
         if (weight <= 1.0) {

@@ -333,7 +333,7 @@ public class Message {
 
     //Creates a temtorary file in Temp folder and a share intent (ready for a start Activity statement)
     //Returns the Intent. Used for sharing the form over the internet (Cloud, email, instant messaging, etc...)
-    public static Intent shareInfoIntent(String mDisplayForm, String mFileName, String extension) {
+    public static Intent shareInfoIntent(String mDisplayForm, String mFileName, String extension, int sharingAction) {
 
 	FileWriter out = null;
 	String tempFileName = new String();
@@ -359,98 +359,30 @@ public class Message {
 	{
 	    loggingclass.writelog("Error creating temporary file in Temp folder", e, true);
 	}
+	Intent share = null;
+	if (sharingAction == AndFlmsg.FORSENDING) {
+	    share = new Intent(Intent.ACTION_SEND);
+	    share.setType("text/plain");
+	    share.putExtra(Intent.EXTRA_TEXT, "Form attached\n");
+	    //share.putExtra(Intent.EXTRA_HTML_TEXT, myDisplayForm);
+	    //share.putExtra(Intent.EXTRA_TEXT, mDisplayForm);
+	    share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(tempFileName)));
+	    //startActivity(Intent.createChooser(share, "Share Form"));
+	    //Intent emailIntent = new Intent(Intent.ACTION_SENDTO, 
+	    //								Uri.fromParts("mailto", mailId, null)); 
+	    share.putExtra(Intent.EXTRA_SUBJECT, "Message " + mFileName); 
+	    // you can use simple text like this
+	    // emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,"Body text here"); 
+	    // or get fancy with HTML like this
+	    // share.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(myDisplayForm));
 
-	Intent share = new Intent(Intent.ACTION_SEND);
-	share.setType("text/plain");
-	share.putExtra(Intent.EXTRA_TEXT, "Form attached\n");
-	//share.putExtra(Intent.EXTRA_HTML_TEXT, myDisplayForm);
-	//share.putExtra(Intent.EXTRA_TEXT, mDisplayForm);
-	share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(tempFileName)));
-	//startActivity(Intent.createChooser(share, "Share Form"));
-	//Intent emailIntent = new Intent(Intent.ACTION_SENDTO, 
-	//								Uri.fromParts("mailto", mailId, null)); 
-	share.putExtra(Intent.EXTRA_SUBJECT, "Message " + mFileName); 
-	// you can use simple text like this
-	// emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,"Body text here"); 
-	// or get fancy with HTML like this
-	// share.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(myDisplayForm));
+	} else 	{ //Make sure there is a default: if (sharingAction == AndFlmsg.FORPRINTING) {
+	    share = new Intent(Intent.ACTION_VIEW);
+	    share.setDataAndType(Uri.fromFile(new File(tempFileName)), "text/html");
+	} 
 	return share;
     }
 
-/*
-//Left-over code for mixed text and binary attached picture
-	Bitmap attachedPictureBitmap = null;
-
-	try
-	{
-	    //First separate the header from the data fields (Headers are never compressed)
-	    //For this read the data file until we find the form information
-	    File fi = new File(Processor.HomePath + Processor.Dirprefix
-		    + mDir + Processor.Separator + mFileName);
-	    FileInputStream fileISi = new FileInputStream(fi);
-	    BufferedReader buf0 = new BufferedReader(new InputStreamReader(fileISi));
-	    dataString = "";
-	    boolean found_form = false;
-	    boolean inTextSection = true;
-	    boolean found_boundary = false;
-	    boolean found_attachment = false;
-	    boolean reading_attachment = false;
-	    boolean found_blankLine = false;
-	    StringBuilder attachmentBuffer = new StringBuilder();
-	    //Handles both hard-coded forms and custom forms
-	    while ((readString0 = buf0.readLine()) != null)
-	    {		
-		if (!found_attachment && readString0.startsWith(multiPartBoundary)) {
-		    found_boundary = true;
-		    inTextSection = false;
-		} 
-		//While we are reading the file, store its complete content in a string for future usage
-		if (inTextSection) dataString += readString0 + "\n"; //Skip if we are into attachments
-		if (found_flmsg && !found_form && readString0.contains(">") && readString0.startsWith("<")) {
-		    found_form = true;
-		    headerForm = readString0;
-		    headerString = dataString;
-		    //Reset for capturing the data fields values
-		    dataString = "";
-		}
-		if (readString0.startsWith("<flmsg>")) {
-		    found_flmsg = true;
-		} 
-		if (found_boundary && readString0.startsWith(imageFieldPrefix)) {
-		    found_attachment = true;
-		} 
-		if (found_attachment && readString0.equals("")) {
-		    found_blankLine = true;
-		} 
-		if (found_blankLine && !readString0.equals("")) {
-		    reading_attachment = true;
-		    attachmentBuffer.append(readString0 + "\n");
-		}
-		if (reading_attachment && readString0.equals("")) { //End of Base64 section, process data
-		    reading_attachment = false;
-		    found_blankLine = false;
-		    found_attachment = false;
-		    found_boundary = false;
-		    //Process the attached data found
-		    //Base64 decode to png image
-		    byte[] rawPictureBuffer = Base64.decode(attachmentBuffer.toString(), Base64.DEFAULT);
-		    //Decode image into Bitmap
-		    BitmapFactory.Options options = new BitmapFactory.Options();
-		    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		    attachedPictureBitmap = BitmapFactory.decodeByteArray(rawPictureBuffer, 0, rawPictureBuffer.length, options);
-		    //Size of buffer containing the Bitmap
-		    attachedPictureWidth = attachedPictureBitmap.getWidth();
-		    attachedPictureHeight = attachedPictureBitmap.getHeight();
-		    int pictureArraySize =  attachedPictureWidth * attachedPictureHeight * 4;
-		    //Extract RGB array from Bitmap
-		    ByteBuffer byteBuffer = ByteBuffer.allocate(pictureArraySize);
-		    attachedPictureBitmap.copyPixelsToBuffer(byteBuffer);
-		    attachedPictureArray = new byte[pictureArraySize];
-		    byteBuffer.rewind();
-		    byteBuffer.get(attachedPictureArray);
-		}
-	    }
- */
 
     //Takes a directory for the data file, a data file name, and an extension for the form file name and returns a formatted string
     //Returns an HTML format String. For custom forms, ALL INPUT field elements are marked as read-only

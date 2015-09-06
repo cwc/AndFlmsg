@@ -1,0 +1,46 @@
+Hello dear OM.
+
+This is the first release of an Flmsg/Fldigi combination for Android.
+
+The performance is good as the modems now coded in native C++ code for performance and is heavily based on the Fldigi modems code.
+
+Audio coupling works well with the MT-63 and MFSK Long interleave modes.
+
+A single processor ARM V7 or higher specs/later model should be able to run most/all included modems.
+
+How to test it:
+
+To install the app (.apk file) you need to have the setup "allow 3rd party applications" or "unknown sources" set to yes (normally in the security section of the device).
+
+Some permissions may seem odd: phone status is used to disconnect the Bluetooth link if a phone call comes in while linked to the radio via Bluetooth. The rest is pretty logical.
+
+After installation, at first run you will be prompted for the location of the NBEMS.files folder. This will create the NBEMS.files directory structure and automatically copy the base set of forms into the proper subfolders.
+
+Via the menu button select "Preferences" then a) Select the "use custom list of modes" and select the desired modes, b) in Modem, de-select slow-cpu if you have a fast device (approx less than 3 years old), c) Adjust the audio center frequency if required.
+
+Please note also that in Android THERE IS NO SHARING OF AUDIO DEVICES. The notification in the system bar is a reminder that as long as the receiving modem is running the microphone or Bluetooth AUDIO IS UNAVAILABLE to other functions including possibly the phone function itself.
+
+STOPPING the modem or exiting completely the application VIA THE EXIT FUNCTION IN THE MENU will free the audio input devices.
+
+The screens. Swipping across a screen moves to the next/preceding screen.
+
+1. Terminal: displays properly formatted received data and some debug messages. When a form is received it displays the wrapped form data. The simulate button sends the content of the sample.text file (Received folder) to the modem output. Ensure the modem is off if using this button.
+
+A long-press on the received text opens the select/copy to clipboard option.
+
+2. Modem: allows for modem change, squelch level adjustment, modem on/off, tune, display of the waterfall, TX abort. Displays all received characters, the CPU load (top) and the signal quality versus squelch level (bottom).
+
+A long-press on the received text opens the select/copy to clipboard option.
+
+3. Messages are organised in folders: Inbox, Forms (for creating new messages), Templates, Drafts, Outbox, Sent and Logs. Selecting a form or a message is done by long-pressing an entry. 
+The message will be displayed together with the relevant actions for the folder.
+
+All files are in the <name of sdcard>/NBEMS folder structure on the device.
+
+If a crash occurs, the app gives you the opportunity to send a crash report via email after reviewing the information supplied.
+
+Enjoy.
+
+All the best,
+
+73, John (VK2ETA)

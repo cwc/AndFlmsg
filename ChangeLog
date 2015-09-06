@@ -1,0 +1,201 @@
+A0.0.1 Initial alpha release based on Flmsg version 2.0.4
+
+A0.0.2 
+- HTML message is now sent as file/attachment when sharing an HTML formatted message
+- Fixed bug when searching for display templates (variable file suffix)
+
+A0.0.3
+- Clean temporary TempHtml folder on program entry
+- Lock un-used buttons and functions
+- Rename toast messages to make them relevant
+- Change app icons and notifications
+- Refactor a number of variables and methods
+- Make code comments relevant
+- Add TX RSID when transmitting from Terminal screen
+
+A0.1.0
+- Replaced all Java modems with C++ native modems based on Fldigi 3.21.82 code 
+- Added Olivia, MT63 modems
+- Made available all the modes currently in Fldigi (but restricted the list for alpha testing)
+- Cleaned all the Pskmail code and comments legacy, or converted to Flmsg code and comments
+- Removed from the Java side all built-in lists of modes and modems
+- Extract the list of available modems and modes from C++ code (modem.cxx and rsid_def.cxx)
+- Modified logic for custom list of modes. Now uses a dynamic list of preferences.
+
+B0.2.0 (First Beta release)
+- Re-organised screens like an email system (Inbox, Drafts, Outbox, Sent items etc...)
+- Added full handling of Custom forms.
+- Added generic handling of Hard coded forms (conversion from HC to custom forms and back)
+- Generated Radiogram, ICS205 and ICS213 HTML entry forms and their specific processing and popups
+- Added log file for key actions
+- Added "Send all messages in Outbox"
+- Added time estimate and mode change from the Outbox view
+- Cleaned code and comments
+
+B0.2.2
+- At first run the application will prompt for the location of the NBEMS.files folder and will copy the 
+  available set of forms in the subfolders, ready for use
+- Added menu option to reset forms to defaults (as initially installed)
+- Cleaned code and comments
+- Fixed bugs relating to the native interface (wrong thread ids)
+
+B0.3.0
+- Bug fix: when saving form as template caused a crash when closing the popup window (not on UI thread error)
+- When prompting for location of NBEMS.files, offer option to use default and bypass directory choosing step
+- Fixed receiving of post transmission RSID (flushing the receive pipe and processing characters) 
+- Added Modem/IDs option of sending post transmission RSID
+- Fixed calculation of TX time for MT63 modes
+- Added forms Plaintext, ICS205A, ICS206, ICS214, ICS216, HICS203, HICS206, HICS213, HICS214. All ICS & HICS forms now implemented.
+- Fixed thread inconsistency for function calls from Native C++ to Java
+- Fixed auto-resize when changing orientation in a form view/edit screen (removed popup windows)
+- Removed Back Button action across application (to avoid loosing data input)
+- Resolved forward and backward compatibility issues: A) keyboard not showing on forms edit in Android 2.2 and 2.3 B) Style/Theme change on APIs > 11
+- Fixed waterfal/no-waterfall display proportions between devices and orientation combinations
+- Temporarily disabled the select/copy 
+
+
+B0.4.0
+- Added Android support library for backward compatibility for Notifications (for API < 11). 
+  Now notifications of the modem running are displayed in all versions of Android the app will run on. 
+  This bring back the menu (action overflow) button in the action bar for devices without a hardware menu button.
+- Changed to standard style across Android versions and adjusted for consistent display between various device screen sizes.
+- Removed display of the windows titles and replaced with modern actions bar (opens-up easy access to future functions).
+- Re-instated the clipboard select/copy on terminal and modem screens.
+- Added progress indicator of percent TXed characters in title bar.
+- Reformatted the overflow/menu button on top action bar to match action bar height (horizontal instead of vertical)
+- Added a blank form plus auto save for forms with checksum errors (similar to Flmsg).
+- Added text display of raw data when message is not complete / corrupted.
+- Fixed Bug: if a "send all messages" process is stopped in the middle, the "Send All Msg" button did become inactive.
+- Added: Update mode information in title when we change mode inside an Outbox form view.
+- Sort Forms either by name (in Forms and Templete views) or by reverse date in Inbox, Drafts, Outbox and Sent views.
+- Added message Rx timeout to abort message reception. Adjustable from 1 to 10 Seconds in preferences as per Fldigi.
+- Restored back button from messages displays, but with warning and double back key safety.
+- Added DominoEx mode (NON FEC for the time being as THOR seems better then DOMINOEX + FEC at the same speed).
+- Bug fix: option Modem/Modem Volume now controls modem ouput also. Was only working on Tune volume until now.
+- Bug fix: web-page buttons would often(!) not work on devices with API 17 onwards (Jelly_Beans_MR1). Added @JavascriptInterface to the interface methods.
+
+
+
+B0.5.0
+- Made re-sampling and RSID FFT processing conditional. Saves CPU load on old devices with 
+     ARM v6 CPUs (and older ARM V7 ones too) and permits more modes to be used on these devices. 
+     Enabled only when Rx Rsid and waterfall ARE in use.
+- Changed priority of background Modem thread to normal to balance between modem and GUI. No 
+     impact visible on modern devices.
+- Copied Slow CPU processing options from Java modems in AndPskmail. Allows for more of the MFSK, 
+     PSKR, Thor and DominoEx modes to be used. Essential for devices with ARM v6 processors (until 
+     recently most low cost Android devices).
+- Changed Slow CPU option default from Yes to No as most modern devices do not need that option and
+     leaving it on slightly degrades the decoding capability.
+- Added transfer in/out of html forms. This allows receiving then installing OR transmitting 
+     custom forms over the radio (as per Flmsg).
+- Added button "Install Received HTML form" (when received over radio).
+- Bug fix: Fix display of HTML reserved characters (<>&\n). Was missing the semicolumn after the entity name.
+- Reduce digital modes list to a useful set for message passing (as per Flmsg list plus a few).
+- Removed smoothing of signal quality display ("the green bar"). Now displays raw value from modems.
+- Added option when sharing a message: now has WRAP, HTML and RAW (as in raw Flmsg file ) formats proposed.
+- SAMSUNG & WIKO Action Bar bug simple workaround (try/catch) - needs testing.
+- Added logging of Share actions into log file.
+- Changed menu icons to same ones for all resolutions.
+- Added preference for application theme (System default, Dark theme or Small screen Dark theme).
+- Modified ICS-213 as per Flmsg V2.0.9 (added Optional Incident field).
+- Added MFSK image reception. Added access to RX images via Android Gallery.
+
+
+
+B0.6.0
+- Re-added PSK31 and PSK63 modes as per suggestion. Does not have AFC yet, so it needs RSID for 
+     precise frequency alignment.
+- Changed the preference theme to always use the system default theme. On some devices the 
+     checkboxes would not show as they would be the same colour as the background.
+- Added "Light" UI scheme and removed black background from the system default scheme.
+
+
+B0.7.0 (Not Released)
+- Changed defaults at new install: RxRSID and TxRSID are ON, mode is MT63-2000-L.
+- Added CSV form. Editing is in plain text OR via an external csv handling app (e.g. OfficeSuite)
+
+
+V1.0.0 (Not Released)
+- Fixed GUI performance issue visible after large accumulation of received characters in the modem screen
+- Added 8PSK modes (includes preliminary 8PSK500F x 2 Carriers)
+- Added UTF-8 support in Rx and Tx. Should works will all left-to-right texts and Asian text.
+- Fixed delay and warning for double back button press to exit a form screen
+- Fixed display to show mode in action bar when screen width is limited
+- Added forced display of overflow button in action bar
+- Renamed "FORM" screen button to "Compose" to reflect Email concept more closely.
+- In message compose screen, renamed "TFER by RADIO" button into "TFER FORM ONLY" as 
+     it could be mistaken as a way to send the composed message over radio.
+- Fixed bug in "Share Message" action from Outbox and Sent folders
+- Added overlay notification for message screens (same as Terminal and Modem screens).
+
+
+V1.1.0 (Not Released)
+- Added attached picture option for forms. Transmission is done either digitally as part of 
+     the message (small images/fast modes) or in MFSK image modes immediately after the 
+     transmission of the message text.
+- Added "Picture Form" with GPS coordinates.
+- Added handling of HTML5 elements, without data entry help and validation at this time. The 
+     forms used on PC Flmsg are recognized but the data entry does not show date choosers and does
+     not validate at this point.
+- Minimized memory use during images processing (release of large unused objects).
+- Added options for TX of images: digital or Analog (if so then mode, colour/greyscale, speed)
+- Bug fix: in custom forms, if a field name appeared in the data of another field it would display
+     part of that field's data. 
+- Changed Txed format of textarea fields. Brought up-to-date with Flmsg-2.0.12 handling of custom 
+     forms special characters. Also removed quotes around TEXTAREA. Now escapes all text/numeric fields).
+
+
+V1.2.0
+- Added "Share" format option for printing to WIFI, Bluetooth, USB or web-enabled printers via third-party-app (PrinterShare).
+- Added latitude/longitude fields prefill using GPS coordinates stored in image
+- Add size limit with auto-resize when attaching pictures. Will choose between jpeg and png 
+     format for the smallest file size. If jpeg is used (most cases) copy Exif info across to 
+     resized picture.
+- Added pilot tone options for 8PSK modes. 
+- Removed preliminary 8PSK500F x 2 Carriers mode and all FEC versions.
+- Added clickable link for Google Maps when viewing a "Picture Message".
+- Added slanted image correction and save option.
+
+
+Important To-Dos for next release:
+- Add device GPS coordinates prefill
+
+
+Next To-Dos:
+- Add keep original picture if smaller at attachment time (e.g. back and white signature)
+- Optimize bitmaps - update instead of re-create at each new line - resolve immutable issue (or
+     convert to canvas drawing)
+- Add progress indicator to Image Tx
+- Add option of viewing message in external browser (of choice)
+- Add framed display of CSV data in HTML 
+- Add positive identification of message and field before sending image in analog form
+- If display form not found, state "Not Implemented..."
+- Update Tx time estimates for THOR11, OLIVIA and some PSK modes
+- Add HTML-5 new field input controls
+- When "Send all messages" pressed, ask for default picture Tx parameters. Currently uses last
+     options or defaults.
+- Check that when data processsing in TX is complete, the sound buffer is flushed.
+- Fix slow-down on receive of large messages (> 30Kb). Use Stringbuilder.
+- In IARU and Radiogram forms, check the "check button" behaviour when the message field is 
+     blank (returns 1 on a blank field).
+
+
+2nd order of To-Dos:
+- Add option of saving received pictures in jpeg format as well as grey-scale to reduce file size (important 
+     for forwarding a received message)
+- Add Sample Rate Converter library with Rx and Tx PPM audio clock corrections
+- Add notification when new message received
+- add option to extract pictures from message to folder
+- Add "Log all Rx and Tx Characters".
+- Add Signature capture on screen
+- Add Forms transfer over internet
+- Add Base256 to compression options
+- Import the AndPskmail adjustable TX tune option including toggle ON/OFF
+- Add file size info in picture.htm form (for PC too)
+- Add AFC screen tick box and restored AFC code for PSK and MFSK modes (important for MFSK16 in 
+     particular in case of VFO drift during transmission. Assume RSID is always used at start of
+     message to initially align Andflmsg on correct audio frequency.
+- Resolve logcat "Unable to parse URL null" (webtextview) when selecting a field in a form (for example).
+
+

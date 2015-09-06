@@ -425,10 +425,13 @@ extern void change_CModem(int modemCode, double newFrequency) {
 	if (active_modem != NULL) {
 		//First overall modem initilisation
 		active_modem->init();
-		//Then init of RX side
-		active_modem->rx_init();
+		//Moved before rx_init as per Fldigi
 		//Then set RX frequency
 		active_modem->set_freq(newFrequency);
+		//Then init of RX side
+		active_modem->rx_init();
+		//Reset UTF-8 sequence monitor
+		utfExpectedChars = utfFoundChars = 0;
 	}
 }
 
@@ -445,8 +448,10 @@ Java_com_AndFlmsg_Modem_saveEnv( JNIEnv* env, jobject thishere)
 
 //Fast modem change (for Txing image for example) change_CModem
 extern "C" JNIEXPORT void
-Java_com_AndFlmsg_Modem_changeCModem( JNIEnv* env, jobject thishere, jint modemCode, double newFrequency)
+Java_com_AndFlmsg_Modem_changeCModem( JNIEnv* env, jobject thishere, jint modemCode, jdouble newFrequency)
 {
+	gEnv = env;
+
 	//change_CModem(modemCode, active_modem->get_freq()); //Same frequency as previous modem
 	change_CModem(modemCode, newFrequency); //Same frequency as previous modem
 }
@@ -511,6 +516,7 @@ Java_com_AndFlmsg_Modem_getModemCapListString(JNIEnv* env, jobject thishere)
 extern "C" JNIEXPORT jintArray
 Java_com_AndFlmsg_Modem_getModemCapListInt(JNIEnv* env, jobject thishere)
 {
+
 	jintArray returnedArray;
 	int i;
 	int j = 0;
@@ -589,10 +595,11 @@ Java_com_AndFlmsg_Modem_initCModem( JNIEnv* env, jobject thishere,
 	if (active_modem != NULL) {
 		//First overall modem initialisation
 		active_modem->init();
-		//Then init of RX side
-		active_modem->rx_init();
+		//Moved from after rx_init as per Fldigi
 		//Then set RX frequency
 		active_modem->set_freq(frequency);
+		//Then init of RX side
+		active_modem->rx_init();
 		lastCharPos = 0;
 		//Reset UTF-8 sequence monitor
 		utfExpectedChars = utfFoundChars = 0;
@@ -663,6 +670,9 @@ extern "C" JNIEXPORT jstring
 Java_com_AndFlmsg_Modem_RsidCModemReceive( JNIEnv* env, jobject thishere,
 		jfloatArray myfbuffer, jint length, jboolean doSearch)
 {
+	//Save environment if we need to call any methods in Java
+	gEnv = env;
+	gJobject = thishere;
 
 	//Convert to C++ type
 	jboolean myjcopy = true;
@@ -694,6 +704,7 @@ Java_com_AndFlmsg_Modem_getCurrentMode( JNIEnv* env, jobject thishere)
 	return active_modem->get_mode();
 }
 
+//not used - check code before use
 //Returns the decoded characters resulting from the flushing of the rx pipe on RSID rx of new modem
 extern "C" JNIEXPORT jint
 Java_com_AndFlmsg_Modem_getFlushedRxCharacters( JNIEnv* env, jobject thishere)
@@ -712,6 +723,10 @@ Java_com_AndFlmsg_Modem_getFlushedRxCharacters( JNIEnv* env, jobject thishere)
 extern "C" JNIEXPORT void
 Java_com_AndFlmsg_Modem_txRSID(JNIEnv* env, jobject thishere)
 {
+	//Save environment if we need to call any methods in Java
+	gEnv = env;
+	gJobject = thishere;
+
 	if (RsidModem != NULL && active_modem != NULL) {
 		RsidModem->send(true); //Always true as we handle post-rsid decision in higher level
 	}
@@ -723,6 +738,10 @@ extern "C" JNIEXPORT jstring
 Java_com_AndFlmsg_Modem_txInit( JNIEnv* env, jobject thishere,
 		jdouble frequency)
 {
+	//Save environment if we need to call any methods in Java
+	gEnv = env;
+	gJobject = thishere;
+
 	//Init static variable
 	audioBufferIndex = 0;
 
@@ -744,6 +763,10 @@ extern "C" JNIEXPORT jboolean
 Java_com_AndFlmsg_Modem_txCProcess( JNIEnv* env, jobject thishere,
 		jbyteArray myjbuffer, jint length)
 {
+	//Save environment if we need to call any methods in Java
+	gEnv = env;
+	gJobject = thishere;
+
 	//Reset the static variables
 	txCounter = 0;
 	//Convert to C++ type
@@ -797,6 +820,10 @@ Java_com_AndFlmsg_Modem_txPicture( JNIEnv* env, jobject thishere,
 		jbyteArray txPictureBuffer, jint txPictureWidth, jint txPictureHeight,
 		jint txPictureTxSpeed, jint txPictureColour)
 {
+	//Save environment if we need to call any methods in Java
+	gEnv = env;
+	gJobject = thishere;
+
 	//Make sure we have the correct modem
 	if (serviceme != active_modem) return;
 	//Extract the data and a pointer

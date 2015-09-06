@@ -34,6 +34,8 @@ import android.os.Process;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.Base64;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 
@@ -110,16 +112,18 @@ public class Modem {
     private static boolean CModemInitialized = false;
     
     //Mfsk picture
-    private static int picBuffer[];
+    public static int picBuffer[];
     private static int pixelNumber;
     public static Bitmap picBitmap = null;
-    private static int mfskPicHeight = 0;
-    private static int mfskPicWidth = 0;
+    public static int mfskPicHeight = 0;
+    public static int mfskPicWidth = 0;
+    public static String lastSavedPictureFn = "";
+    public static int slantValue = 0;
 
     
     //Declaration of native classes
     private native static String 	createCModem(int modemCode);
-    private native static void		changeCModem(int modemCode, double frequency);
+    private native static void		changeCModem(int modemCode, double newFrequency);
     private native static String 	initCModem(double frequency);
     private native static String 	rxCProcess(short[] buffer, int length);
     private native static int 		setSquelchLevel(double squelchLevel);
@@ -150,17 +154,20 @@ public class Modem {
 
     //Called from the C++ side to modulate the audio output
     public static void txModulate(double[] outDBuffer, int length) {
-	short[] outSBuffer = new short[length];
-	int volumebits = Integer.parseInt(config.getPreferenceS("VOLUME","8"));
-	//Change format and re-scale for Android
-	//To be moved to c++ code for speed
-	for (int i = 0; i < length; i++) {
-	    //outbuf[j] = (short) ((int) (Math.sin(phase) * 8386560) >> volumebits);
-	    //outSBuffer[i]  = (short) ((int)(outDBuffer[i] * 16383.0f) >> volumebits);
-	    outSBuffer[i]  = (short) ((int)(outDBuffer[i] * 8386560.0f) >> volumebits);
-	}
+	int res = 0;
 	//Catch the stopTX flag at this point as well
-	if (!Modem.stopTX) txAt.write(outSBuffer, 0, length);
+	if (!Modem.stopTX) {
+	    short[] outSBuffer = new short[length];
+	    int volumebits = Integer.parseInt(config.getPreferenceS("VOLUME","8"));
+	    //Change format and re-scale for Android
+	    //To be moved to c++ code for speed
+	    for (int i = 0; i < length; i++) {
+		outSBuffer[i]  = (short) ((int)(outDBuffer[i] * 8386560.0f) >> volumebits);
+	    }
+	    res = txAt.write(outSBuffer, 0, length);
+	    if (res < 0)
+		    loggingclass.writelog("Error in writing sound buffer: " + res, null, true);
+	}
     }    
 
 
@@ -185,7 +192,7 @@ public class Modem {
 	//	the start of mfsk picture transmission
 	if (Processor.lastMessageNoExpectedImages > 0)
 	    Processor.pictureRxInTime = (System.currentTimeMillis() - 
-		    Processor.lastMessageEndTxTime < 20000);
+		    Processor.lastMessageEndTxTime < 25000);
 
 	//Save size for later
 	mfskPicWidth = mpicW;
@@ -229,20 +236,45 @@ public class Modem {
 	}
     }
 
-    static boolean edited = false;
 
     //Called from the C++ native side to save the last received picture. 
     public static void saveLastPicture() {
+
+	saveAnalogPicture(true); //New picture
+
+	//Increment picture counter if still expecting more
+	if (Processor.currentImageSequenceNo < Processor.lastMessageNoExpectedImages) {
+	    
+	    Processor.currentImageSequenceNo++;
+	}
+	
+	//Reset the time counter to the end of  the last picture Transmission
+	Processor.lastMessageEndTxTime = System.currentTimeMillis();
+
+	//Make the de-salanting buttons visible and pre-set the de-slanting amount
+	slantValue = 0;
+	//Enable the edit buttons
+	((Activity) AndFlmsg.myContext).runOnUiThread(new Runnable() {
+	    public void run() {
+		Button editButton;
+		editButton = (Button) AndFlmsg.pwLayout.findViewById(R.id.button_slant_left);
+		if (editButton != null) editButton.setEnabled(true);
+		editButton = (Button) AndFlmsg.pwLayout.findViewById(R.id.button_slant_right);
+		if (editButton != null) editButton.setEnabled(true);
+		editButton = (Button) AndFlmsg.pwLayout.findViewById(R.id.button_save_again);
+		if (editButton != null) editButton.setEnabled(true);
+	    }
+	});
+    }
+    
+    
+    //Save and re-save analog picture
+    public static void saveAnalogPicture(boolean newPicture) {
 	String fileName = "";
 	String filePath = "";
 
-	edited = false;
-	
-	//Free buffer when completed Rx
-	picBuffer = null; //let GC recover the memory
-
 	try {
-	    if ((Processor.lastMessageNoExpectedImages > 0) && Processor.pictureRxInTime) {
+	    if ((Processor.lastMessageNoExpectedImages > 0) && (Processor.pictureRxInTime || !newPicture)) {
 		String inboxFolderPath = Processor.HomePath + Processor.Dirprefix + Processor.DirInbox + 
 			Processor.Separator;
 		String tempFolderPath = Processor.HomePath + Processor.Dirprefix + Processor.DirTemp + 
@@ -271,7 +303,11 @@ public class Modem {
 		    FileInputStream fileIs = new FileInputStream(imgFile);
 		    fileIs.read(rawPictureBuffer);
 		    //Add Field name and encode in Base64 to make it text compatible
-		    String imageField = Processor.lastMessageImgFieldName[Processor.currentImageSequenceNo] + ",";
+		    int fieldIndex = Processor.currentImageSequenceNo;
+		    if (!newPicture) {
+			if (fieldIndex >0) fieldIndex--; 
+		    }
+		    String imageField = Processor.lastMessageImgFieldName[fieldIndex] + ",";
 		    String encodedImageLine = imageField + "data:image/png;base64," + 
 			    Base64.encodeToString(rawPictureBuffer, Base64.NO_WRAP) + "\n";
 		    //Insert in received message File, replacing "_imgXYZ,<analog 1>" with "_imgXYZ,data....
@@ -320,8 +356,8 @@ public class Modem {
 		Message.copyAnyFile(Processor.DirTemp, Processor.lastReceivedMessageFname, Processor.DirInbox, false);
 		//Display a message
 		AndFlmsg.topToastText("Image inserted in message: " + Processor.lastReceivedMessageFname);
-	    } else {//Arrived too late, don't attach automatically
-		if ((Processor.lastMessageNoExpectedImages > 0) && !Processor.pictureRxInTime) { 
+	    } else { //Arrived too late, don't attach automatically
+		if (newPicture && (Processor.lastMessageNoExpectedImages > 0) && !Processor.pictureRxInTime) { 
 		    //Display a message, but save the image as an independant picture
 		    AndFlmsg.topToastText("Image received too late after message (> 20 sec)." + 
 			    "\nReceived image will NOT be attached to the message as expected." +
@@ -330,7 +366,12 @@ public class Modem {
 	    }
 	    
 	    //In any case, save the image file for further usage if required
-	    fileName = Message.dateTimeStamp() + ".png";
+	    if (newPicture) {
+		fileName = Message.dateTimeStamp() + ".png";
+		lastSavedPictureFn = fileName;
+	    } else {
+		fileName = lastSavedPictureFn;
+	    }
 	    filePath = Processor.HomePath + Processor.Dirprefix + Processor.DirImages + 
 		    Processor.Separator;
 	    File dest = new File(filePath + fileName);
@@ -357,15 +398,79 @@ public class Modem {
 	} catch (Exception e) {
 	    loggingclass.writelog("Exception Error in 'saveLastPicture' " + e.getMessage(), null, true);
 	}
-	//Reset Flags if we have received all the expected images
-	if (++Processor.currentImageSequenceNo >= Processor.lastMessageNoExpectedImages) {
-	    Processor.lastMessageNoExpectedImages = 0;
-	    Processor.pictureRxInTime = false;
-	}
-	//Reset the time counter to the end of  the last picture Transmission
-	Processor.lastMessageEndTxTime = System.currentTimeMillis();
-	
     }
+    
+  
+    //Corrects the slant in a received image. Applies the cummulative step parameter.
+    public static void deSlant(int step) {
+
+	slantValue += step;
+	if (slantValue > mfskPicWidth) slantValue = mfskPicWidth;
+	if (slantValue < -1 * mfskPicWidth) slantValue = -1 * mfskPicWidth;
+	int pixelNumberAtLineY, sourcePixelNumber, sourcePixel, sourceNextPixel;
+	int nextPixelStep = slantValue < 0 ? -1 : 1;
+	int pixelShift;
+	double thisPixel, nextPixel;
+	double slantLineInc = (double)slantValue / (double)mfskPicHeight;
+	int[] deSlantedPic = new int [picBuffer.length];
+	//copy first line as-is (it is the time/spacial reference)
+	for (int x = 0; x < mfskPicWidth; x++) {
+	    deSlantedPic[x] = picBuffer[x];
+	}
+	//Perform "de-slanting" from the 2n line onwards
+	for (int y = 1; y < mfskPicHeight; y++) {
+	    pixelNumberAtLineY = mfskPicWidth * y;
+	    pixelShift = (int)(y * slantLineInc);
+	    nextPixel = Math.abs((y * slantLineInc) - (double) pixelShift);
+	    thisPixel = 1 - nextPixel;
+
+	    //Shift pixels using fractional value
+	    for (int x = 0; x < mfskPicWidth; x++) {
+		if (x + pixelShift >= 0 && x + pixelShift < mfskPicWidth) {
+		    sourcePixelNumber = pixelShift + pixelNumberAtLineY + x >  picBuffer.length - 2 ?
+			    picBuffer.length - 2 : pixelShift + pixelNumberAtLineY + x;
+		    sourcePixel = picBuffer[sourcePixelNumber];
+		    sourceNextPixel = picBuffer[sourcePixelNumber + nextPixelStep];
+		    double red1 = (((sourcePixel & 0x00ff0000) >> 16) * thisPixel); 
+		    double red2 = (((sourceNextPixel & 0x00ff0000) >> 16) * nextPixel);
+		    int red = (int)(red1 + red2);
+		    double green1 = (((sourcePixel & 0x0000ff00) >> 8) * thisPixel);
+		    double green2 =	(((sourceNextPixel & 0x0000ff00) >> 8) * nextPixel);
+		    int green = (int)(green1 + green2);
+		    double blue1 = ((sourcePixel & 0x000000ff) * thisPixel);
+		    double blue2 = ((sourceNextPixel & 0x000000ff) * nextPixel);
+		    int blue = (int)(blue1 + blue2);
+		    deSlantedPic[pixelNumberAtLineY + x] = 0xff000000 | (red << 16) | (green << 8) | blue;
+		} else { 
+		    //The line is wrapped around, so need to use the previous/next line pixels
+		    sourcePixelNumber = pixelShift + pixelNumberAtLineY + x - (mfskPicWidth * nextPixelStep)>  picBuffer.length - 2 ?
+			    picBuffer.length - 2 : pixelShift + pixelNumberAtLineY + x - (mfskPicWidth * nextPixelStep);
+		    sourcePixel = picBuffer[sourcePixelNumber];
+		    sourceNextPixel = picBuffer[sourcePixelNumber + nextPixelStep];
+		    double red1 = (((sourcePixel & 0x00ff0000) >> 16) * thisPixel); 
+		    double red2 = (((sourceNextPixel & 0x00ff0000) >> 16) * nextPixel);
+		    int red = (int)(red1 + red2);
+		    double green1 = (((sourcePixel & 0x0000ff00) >> 8) * thisPixel);
+		    double green2 =	(((sourceNextPixel & 0x0000ff00) >> 8) * nextPixel);
+		    int green = (int)(green1 + green2);
+		    double blue1 = ((sourcePixel & 0x000000ff) * thisPixel);
+		    double blue2 = ((sourceNextPixel & 0x000000ff) * nextPixel);
+		    int blue = (int)(blue1 + blue2);
+		    //Colors have been shifted as we transmit one line of Red, one of Green, then one of Blue
+		    if (nextPixelStep > 0) { //Slant towards left
+			    deSlantedPic[pixelNumberAtLineY + x] = 0xff000000 | red | (green << 16) | (blue << 8);
+		    } else { //Slant towards right
+			    deSlantedPic[pixelNumberAtLineY + x] = 0xff000000 | (red << 8) | green | (blue << 16);
+		    }
+		} 
+	    }
+	}
+	picBitmap = Bitmap.createBitmap(deSlantedPic, mfskPicWidth, mfskPicHeight, Bitmap.Config.ARGB_8888);
+	deSlantedPic = null; //Release for GC
+	AndFlmsg.mHandler.post(AndFlmsg.updateMfskPicture);	    
+
+    }
+
 
     
     
@@ -563,6 +668,8 @@ public class Modem {
 		    double endproctime = 0;
 		    int numSamples8K = 0;
 		    Modem.soundInInit();
+		    //debugging only 
+		    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'soundInInit'");
 		    NumberOfOverruns = 0;
 		    audiorecorder.startRecording();
 		    RxON = true;
@@ -574,7 +681,11 @@ public class Modem {
 		    //double[] so12K = new double[size12Kbuf];
 		    float[] so12K = new float[size12Kbuf];
 		    //Initialise modem
+		    //debugging only 
+		    //Message.addEntryToLog(Message.dateTimeStamp() + "About to do 'createCModem' with Modem" + Processor.RxModem);
 		    String modemCreateResult = createCModem(Processor.RxModem);
+		    //debugging only 
+		    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'createCModem'");
 		    if (modemCreateResult.contains("ERROR")) {
 			CModemInitialized = false;
 		    } else {
@@ -590,11 +701,17 @@ public class Modem {
 			if (centerfreq > 2500) centerfreq = 2500;
 			if (centerfreq < 500) centerfreq = 500;
 			String modemInitResult = initCModem(centerfreq);
+			//debugging only 
+			//Message.addEntryToLog(Message.dateTimeStamp() + "Done 'initCModem'");
 			//Android Debug
 			//   Modem.MonitorString = modemInitResult;
 			//Prepare RSID Modem
 			createRsidModem();
+			//debugging only 
+			//Message.addEntryToLog(Message.dateTimeStamp() + "Done 'createRsidModem'");
 		    }
+			//debugging only 
+			//Message.addEntryToLog(Message.dateTimeStamp() + "Starting Rx loop");
 		    while (RxON) {
 			endproctime = System.currentTimeMillis();
 			double buffertime = (double) numSamples8K / 8000.0 * 1000.0; //in milliseconds
@@ -966,7 +1083,7 @@ public class Modem {
 			}
 			Modem.txCProcess(bytesToSend, bytesToSend.length);
 			//Save current mode in case we change it for images Tx
-			int currentMode = Processor.RxModem;
+			//int currentMode = Processor.RxModem;
 			//Is there a picture/signature to send after the text?
 			if (txNumberOfImagesToTx > 0) {
 			    //Change to the selected MFSK mode
@@ -975,49 +1092,58 @@ public class Modem {
 				modemCode = Modem.getMode(txPictureTxMode);
 			    }
 			    //Change to MFSK Image modem
-			    Modem.changeCModem(modemCode, frequency);
+//			    Modem.createCModem(modemCode);
+//			    Modem.initCModem(frequency);
+			    //changeCModem(modemCode, frequency);
+			    TxMFSKPicture picModem = new TxMFSKPicture(modemCode);
+			    //PictureTxRSID picRSIDTx = new PictureTxRSID();
 			    //debugging only 
-			    Message.addEntryToLog(Message.dateTimeStamp() + "Done 'changeCModem' with modem # " + modemCode);
+			    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'changeCModem' with modem # " + modemCode);
 			    for (int i=0; i < txNumberOfImagesToTx; i++) {
 				if ( Message.attachedPictureArray[i] != null && 
 					Message.attachedPictureWidth[i] > 0 && 
 					Message.attachedPictureHeight[i] > 0) {
-				    Modem.txInit(frequency);
+				    //Modem.txInit(frequency);
 				    //debugging only 
-				    Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txInit' at frequency: " + frequency);
+				    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txInit' at frequency: " + frequency);
 				    //Always send RSID
-				    Modem.txRSID();
+				    String modemName = Modem.modemCapListString[getModeIndex(modemCode)];
+				    PictureTxRSID.send(modemName);
 				    //debugging only 
-				    Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txRSID' ");
+				    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txRSID' ");
 				    //Send picture 
-				    Modem.txPicture(Message.attachedPictureArray[i], Message.attachedPictureWidth[i], 
-					    Message.attachedPictureHeight[i], txPictureTxSpeed, txPictureColour);
+				    picModem.txImageProcess("", Message.attachedPictureArray[i], 
+					    Message.attachedPictureWidth[i], Message.attachedPictureHeight[i],
+						txPictureTxSpeed, txPictureColour);
+				    //Modem.txPicture(Message.attachedPictureArray[i], Message.attachedPictureWidth[i], 
+				    //	    Message.attachedPictureHeight[i], txPictureTxSpeed, txPictureColour);
 				    //debugging only 
-				    Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txPicture' ");
+				    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txPicture' ");
 				    //Release the (large) Byte array for GC
 				    Message.attachedPictureArray[i] = null;
 				    //debugging only 
-				    Message.addEntryToLog(Message.dateTimeStamp() + "Done 'release array' ");
+				    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'release array' ");
 				}
 			    }
 			    //Change back to the previous mode (for post-Tx-RSID purposes)
-			    Message.addEntryToLog(Message.dateTimeStamp() + "About to execute 'changeCModem' with modem # " + currentMode);
-			    changeCModem(currentMode, frequency);
+			    //Message.addEntryToLog(Message.dateTimeStamp() + "About to execute 'changeCModem' with modem # " + currentMode);
+			    //Modem.createCModem(currentMode);
+			    //Modem.initCModem(frequency);
+			    //changeCModem(currentMode, frequency);
 			    //debugging only 
-			    Message.addEntryToLog(Message.dateTimeStamp() + "Done 'changeCModem' with modem # " + currentMode);
+			    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'changeCModem' with modem # " + currentMode);
 			}
 			//Send TX RSID if required
 			//Check and send post-transmission RSID
 			if (txRsidOn && config.getPreferenceB("TXPOSTRSID", false)) {
-			    //Replaced with direct specification of modem
 			    Modem.txRSID();
 			    //debugging only 
-			    Message.addEntryToLog(Message.dateTimeStamp() + "Done post 'txRSID'");
+			    //Message.addEntryToLog(Message.dateTimeStamp() + "Done post 'txRSID'");
 			}
 			//Stop audio track
 			txAt.stop();
 			//debugging only 
-			Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txAt.stop'");
+			//Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txAt.stop'");
 			//Wait for end of audio play to avoid 
 			//overlaps between end of TX and start of RX
 			while (txAt.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
@@ -1029,44 +1155,44 @@ public class Modem {
 			    }
 			}
 			//debugging only 
-			Message.addEntryToLog(Message.dateTimeStamp() + "Done 'waiting for end of playing state'");
+			//Message.addEntryToLog(Message.dateTimeStamp() + "Done 'waiting for end of playing state'");
 			//Android debug add a fixed delay to avoid cutting off the tail end of the modulation
 			Thread.sleep(500);
 			txAt.release();
 			//debugging only 
-			Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txAt.release'");
+			//Message.addEntryToLog(Message.dateTimeStamp() + "Done 'txAt.release'");
 
 			//if the TX was complete, move message from Outbox to Sent folder
 			//Detect if it was a simple text sent from the terminal window (no folder and filename)
 			if (!Modem.stopTX && (txFolder.length() > 0) && (txFileName.length() > 0)) {
 			    Message.copyAnyFile(txFolder, txFileName, Processor.DirSent, false);
 			    //debugging only 
-			    Message.addEntryToLog(Message.dateTimeStamp() + "Done 'copyAnyFile'");
+			    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'copyAnyFile'");
 			    Message.deleteFile(Processor.DirOutbox, txFileName, false);//Don't advise deletion
 			    //debugging only 
-			    Message.addEntryToLog(Message.dateTimeStamp() + "Done 'deleteFile'");
+			    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'deleteFile'");
 			    //Ensure we are using the right env variable for this TX thread
-			    //fixed in C++ now 
-			    //Message.saveEnv();
 			    Message.addEntryToLog(Message.dateTimeStamp() + ": Sent Message file " + txFileName);
 			    Thread displayMessagesThread = new Thread(AndFlmsg.displayMessagesRunnable);
 			    displayMessagesThread.start();
 			    //debugging only 
-			    Message.addEntryToLog(Message.dateTimeStamp() + "Done 'displayMessagesThread.start'");
+			    //Message.addEntryToLog(Message.dateTimeStamp() + "Done 'displayMessagesThread.start'");
 			}
 
-			//Restart modem reception
-			unPauseRxModem();
-			//debugging only 
-			Message.addEntryToLog(Message.dateTimeStamp() + "Done 'unPauseRxModem'");
+		    }
+		    catch (Exception e) {
+			loggingclass.writelog("Can't output sound. Is Sound device busy?", null, true);
+		    }
+		    finally {
 			Processor.TXActive = false;
 			Processor.Status = "Listening";
 			//VK2ETA added to clear progress info during a tune
 			AndFlmsg.txProgressCount = "";
 			AndFlmsg.mHandler.post(AndFlmsg.updatetitle);   
-		    }
-		    catch (Exception e) {
-			loggingclass.writelog("Can't output sound. Is Sound device busy?", null, true);
+			//Restart modem reception
+			unPauseRxModem();
+			//debugging only 
+			//Message.addEntryToLog(Message.dateTimeStamp() + "Done 'unPauseRxModem'");
 		    }
 
 		}
@@ -1110,7 +1236,7 @@ public class Modem {
 	    Processor.TXActive = true;
 	    AndFlmsg.mHandler.post(AndFlmsg.updatetitle);
 
-	    String frequencySTR = config.getPreferenceS("AFREQUENCY","1000");
+	    String frequencySTR = config.getPreferenceS("AFREQUENCY","1500");
 	    int frequency = Integer.parseInt(frequencySTR);
 
 	    int volumebits = Integer.parseInt(config.getPreferenceS("VOLUME","8"));

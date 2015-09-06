@@ -37,13 +37,16 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -73,6 +76,7 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
@@ -112,11 +116,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -192,7 +198,7 @@ public class AndFlmsg extends  AppCompatActivity {
     private static ScrollView myModemSC;
     private static waterfallView myWFView;
     
-    private static View pwLayout;
+    public static View pwLayout;
 
     private ListView msgListView;
     private static WebView mWebView;
@@ -202,6 +208,9 @@ public class AndFlmsg extends  AppCompatActivity {
     private static int paramCount = 0;
     private static String arlMsg = "";
     private static AlertDialog myAlertDialog = null;
+    private static int sharingAction = 0; 
+    public final static int FORSENDING = 1;
+    public final static int FORPRINTING = 2;
     private static String formattedMsg = "";
     private static String msgFieldToUpdate = "";
     private static String checkField;
@@ -2912,13 +2921,14 @@ public class AndFlmsg extends  AppCompatActivity {
 			myButton.setOnClickListener(new OnClickListener() {
 			    public void onClick(View v) {
 				//Prompt for sharing format
+				sharingAction = FORPRINTING; //To match the default in the sharedialog layout
 				AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(AndFlmsg.this);
-				myAlertDialog.setMessage("Which Format do you want to share that file in?");
-				//myAlertDialog.setCancelable(false);
+				myAlertDialog.setView(((Activity) AndFlmsg.myContext).getLayoutInflater()
+					.inflate(R.layout.sharedialog, null));
 				myAlertDialog.setPositiveButton("HTML", new DialogInterface.OnClickListener() {
 				    public void onClick(DialogInterface dialog, int id) {
 					mDisplayForm = Message.formatForDisplay(Processor.DirInbox, mFileName, ".html");
-					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".html");
+					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".html", sharingAction);
 					startActivityForResult(Intent.createChooser(shareIntent, "Send Form..."), SHARE_MESSAGE_RESULT);
 					Message.addEntryToLog(Message.dateTimeStamp() + ": Shared " + mFileName);
 				    }
@@ -2932,7 +2942,7 @@ public class AndFlmsg extends  AppCompatActivity {
 					    //if (mFileName.lastIndexOf(".") != mFileName.length()) //Dot is not last character
 						extension = mFileName.substring(mFileName.lastIndexOf("."));
 					}
-					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, extension);
+					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, extension, sharingAction);
 					startActivityForResult(Intent.createChooser(shareIntent, "Send Form..."), SHARE_MESSAGE_RESULT);
 					Message.addEntryToLog(Message.dateTimeStamp() + ": Shared " + mFileName);
 				    }
@@ -2940,7 +2950,7 @@ public class AndFlmsg extends  AppCompatActivity {
 				myAlertDialog.setNeutralButton("WRAP", new DialogInterface.OnClickListener() {
 				    public void onClick(DialogInterface dialog, int id) {
 					mDisplayForm = Message.formatForTx(Processor.DirInbox, mFileName, true);//Pictures in digital form
-					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".wrap");
+					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".wrap", sharingAction);
 					startActivityForResult(Intent.createChooser(shareIntent, "Send Form..."), SHARE_MESSAGE_RESULT);
 					Message.addEntryToLog(Message.dateTimeStamp() + ": Shared " + mFileName);
 				    }
@@ -3358,13 +3368,14 @@ public class AndFlmsg extends  AppCompatActivity {
 			    //Added options in wrap and raw format
 			    public void onClick(View v) {
 				//Prompt for sharing format
+				sharingAction = FORPRINTING; //To match the default in the sharedialog layout
 				AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(AndFlmsg.this);
-				myAlertDialog.setMessage("Which Format do you want to share that file in?");
-				//myAlertDialog.setCancelable(false);
+				myAlertDialog.setView(((Activity) AndFlmsg.myContext).getLayoutInflater()
+					.inflate(R.layout.sharedialog, null));
 				myAlertDialog.setPositiveButton("HTML", new DialogInterface.OnClickListener() {
 				    public void onClick(DialogInterface dialog, int id) {
 					mDisplayForm = Message.formatForDisplay(Processor.DirOutbox, mFileName, ".html");
-					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".html");
+					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".html", sharingAction);
 					startActivityForResult(Intent.createChooser(shareIntent, "Send Form..."), SHARE_MESSAGE_RESULT);
 					Message.addEntryToLog(Message.dateTimeStamp() + ": Shared " + mFileName);
 				    }
@@ -3378,7 +3389,7 @@ public class AndFlmsg extends  AppCompatActivity {
 					    //if (mFileName.lastIndexOf(".") != mFileName.length()) //Dot is not last character
 					    extension = mFileName.substring(mFileName.lastIndexOf("."));
 					}
-					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, extension);
+					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, extension, sharingAction);
 					startActivityForResult(Intent.createChooser(shareIntent, "Send Form..."), SHARE_MESSAGE_RESULT);
 					Message.addEntryToLog(Message.dateTimeStamp() + ": Shared " + mFileName);
 				    }
@@ -3386,7 +3397,7 @@ public class AndFlmsg extends  AppCompatActivity {
 				myAlertDialog.setNeutralButton("WRAP", new DialogInterface.OnClickListener() {
 				    public void onClick(DialogInterface dialog, int id) {
 					mDisplayForm = Message.formatForTx(Processor.DirOutbox, mFileName, true);//Images in digital form
-					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".wrap");
+					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".wrap", sharingAction);
 					startActivityForResult(Intent.createChooser(shareIntent, "Send Form..."), SHARE_MESSAGE_RESULT);
 					Message.addEntryToLog(Message.dateTimeStamp() + ": Shared " + mFileName);
 				    }
@@ -3718,13 +3729,14 @@ public class AndFlmsg extends  AppCompatActivity {
 			    //Added wrap and raw format options
 			    public void onClick(View v) {
 				//Prompt for sharing format
+				sharingAction = FORPRINTING; //To match the default in the sharedialog layout
 				AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(AndFlmsg.this);
-				myAlertDialog.setMessage("Which Format do you want to share that file in?");
-				//myAlertDialog.setCancelable(false);
+				myAlertDialog.setView(((Activity) AndFlmsg.myContext).getLayoutInflater()
+					.inflate(R.layout.sharedialog, null));
 				myAlertDialog.setPositiveButton("HTML", new DialogInterface.OnClickListener() {
 				    public void onClick(DialogInterface dialog, int id) {
 					mDisplayForm = Message.formatForDisplay(Processor.DirSent, mFileName, ".html");
-					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".html");
+					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".html", sharingAction);
 					startActivityForResult(Intent.createChooser(shareIntent, "Send Form..."), SHARE_MESSAGE_RESULT);
 					Message.addEntryToLog(Message.dateTimeStamp() + ": Shared " + mFileName);				    }
 				});
@@ -3737,7 +3749,7 @@ public class AndFlmsg extends  AppCompatActivity {
 					    //if (mFileName.lastIndexOf(".") != mFileName.length()) //Dot is not last character
 						extension = mFileName.substring(mFileName.lastIndexOf("."));
 					}
-					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, extension);
+					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, extension, sharingAction);
 					startActivityForResult(Intent.createChooser(shareIntent, "Send Form..."), SHARE_MESSAGE_RESULT);
 					Message.addEntryToLog(Message.dateTimeStamp() + ": Shared " + mFileName);
 				    }
@@ -3745,7 +3757,7 @@ public class AndFlmsg extends  AppCompatActivity {
 				myAlertDialog.setNeutralButton("WRAP", new DialogInterface.OnClickListener() {
 				    public void onClick(DialogInterface dialog, int id) {
 					mDisplayForm = Message.formatForTx(Processor.DirSent, mFileName, true);//Images in digital form
-					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".wrap");
+					Intent shareIntent = Message.shareInfoIntent(mDisplayForm, mFileName, ".wrap", sharingAction);
 					startActivityForResult(Intent.createChooser(shareIntent, "Send Form..."), SHARE_MESSAGE_RESULT);
 					Message.addEntryToLog(Message.dateTimeStamp() + ": Shared " + mFileName);
 				    }
@@ -3957,6 +3969,26 @@ public class AndFlmsg extends  AppCompatActivity {
 	});
 
     }
+    
+
+    public void onRadioButtonClicked(View view) {
+	// Is the button now checked?
+	boolean checked = ((RadioButton) view).isChecked();
+
+	// Check which radio button was clicked
+	switch(view.getId()) {
+	case R.id.forPrinting:
+	    if (checked)
+		sharingAction = FORPRINTING;
+		break;
+	case R.id.forSending:
+	    if (checked)
+		sharingAction = FORSENDING;
+		break;
+	}
+    }
+
+
 
     //Send all Outbox messages in sequence automatically
     class backgroundSendAllMessages extends AsyncTask<Void, Integer, String> {
@@ -4407,21 +4439,21 @@ public class AndFlmsg extends  AppCompatActivity {
 	myButton = (Button) pwLayout.findViewById(R.id.button_slant_left);
 	myButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		//
+		Modem.deSlant(+2);
 	    }
 	});
 	// Slant Right button init
 	myButton = (Button) pwLayout.findViewById(R.id.button_slant_right);
 	myButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		//
+		Modem.deSlant(-2);
 	    }
 	});
 	// Save Again button init
 	myButton = (Button) pwLayout.findViewById(R.id.button_save_again);
 	myButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		//
+		Modem.saveAnalogPicture(false); //Not a new picture
 	    }
 	});
 

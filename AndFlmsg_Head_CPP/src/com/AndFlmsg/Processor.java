@@ -41,8 +41,8 @@ import ar.com.daidalos.afiledialog.FileChooserDialog;
  */
 public class Processor extends Service{
 
-    static String application ="AndFlmsg 1.2.0RC1"; // Used to preset an empty status 
-    static String version = "Version 1.2.0RC1, 2015-08-26";
+    static String application ="AndFlmsg 1.2.0RC5"; // Used to preset an empty status 
+    static String version = "Version 1.2.0RC5, 2015-09-06";
 
     static boolean onWindows = true;
     static String ModemPreamble="";  // String to send before any Tx Buffer
