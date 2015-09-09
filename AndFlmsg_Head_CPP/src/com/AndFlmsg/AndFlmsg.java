@@ -3563,10 +3563,10 @@ public class AndFlmsg extends  AppCompatActivity {
 					    Message.attachedPictureColour = false;
 					    Message.attachedPictureTxSPP = 2;
 					} else if ( Message.attachedPictureColour == false && Message.attachedPictureTxSPP == 2) {
-					    Message.attachedPictureColour = false;
+/* Remove X8 speed for now					    Message.attachedPictureColour = false;
 					    Message.attachedPictureTxSPP = 1;
 					} else if ( Message.attachedPictureColour == false && Message.attachedPictureTxSPP <= 1) {
-					    Message.attachedPictureColour = true;
+*/					    Message.attachedPictureColour = true;
 					    Message.attachedPictureTxSPP = 8;
 					} else if ( Message.attachedPictureColour == true && Message.attachedPictureTxSPP >= 8) {
 					    Message.attachedPictureColour = true;
@@ -3575,10 +3575,10 @@ public class AndFlmsg extends  AppCompatActivity {
 					    Message.attachedPictureColour = true;
 					    Message.attachedPictureTxSPP = 2;
 					} else if ( Message.attachedPictureColour == true && Message.attachedPictureTxSPP == 2) {
-					    Message.attachedPictureColour = true;
+/*					    Message.attachedPictureColour = true;
 					    Message.attachedPictureTxSPP = 1;
 					} else if ( Message.attachedPictureColour == true && Message.attachedPictureTxSPP <= 1) {
-					    Message.attachedPictureColour = false;
+*/					    Message.attachedPictureColour = false;
 					    Message.attachedPictureTxSPP = 8;
 					}
 					int timeToTxImages = 0;
