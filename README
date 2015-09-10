@@ -1,43 +1,69 @@
-Hello dear OM.
+Hello dear OMs,
 
-This is the first release of an Flmsg/Fldigi combination for Android.
+This app is a combination of Fldigi and Flmsg for portable devices
+ running Android.
 
-The performance is good as the modems now coded in native C++ code for performance and is heavily based on the Fldigi modems code.
+The main objective of this development is to provide a low power 
+ highly-portable, as in mobile or backpack, Flmsg/Fldigi solution. 
 
-Audio coupling works well with the MT-63 and MFSK Long interleave modes.
+Rigs like the Yaesu's FT-817, Icom's 703 and Elecraft's KX3 would
+ be the typical companions of the Android phone or tablet running 
+ AndFlmsg, thereby providing a low weight, low energy requirement,
+ access to most Flmsg services.
 
-A single processor ARM V7 or higher specs/later model should be able to run most/all included modems.
+The integration of Internet sharing/forwarding makes this solution
+ attractive as a relay option, possibly a mobile or portable station
+  in a pertinent geographical location.
 
-How to test it:
+The inclusion of modes like MT-63 and long interleave MFSK modes allows
+ audio coupling to be used effectively without the need for an audio 
+ interface.
 
-To install the app (.apk file) you need to have the setup "allow 3rd party applications" or "unknown sources" set to yes (normally in the security section of the device).
+The addition of images and GPS data inclusion opens the usage to 
+ practical field reporting too.
 
-Some permissions may seem odd: phone status is used to disconnect the Bluetooth link if a phone call comes in while linked to the radio via Bluetooth. The rest is pretty logical.
+In a more developed configuration, for example with a 10” tablet 
+ connected to a Bluetooth or USB keyboard plus mouse, and maybe also
+ with an audio interface, the operation we get, including data input,
+ nears the performance and practicality of a laptop configuration but
+ without the power consumption and cost of the later. 
 
-After installation, at first run you will be prompted for the location of the NBEMS.files folder. This will create the NBEMS.files directory structure and automatically copy the base set of forms into the proper subfolders.
+Also, the data entry forms can be re-modeled independently of the
+ display forms in order to match the screen real-estate of the target
+ devices.
 
-Via the menu button select "Preferences" then a) Select the "use custom list of modes" and select the desired modes, b) in Modem, de-select slow-cpu if you have a fast device (approx less than 3 years old), c) Adjust the audio center frequency if required.
 
-Please note also that in Android THERE IS NO SHARING OF AUDIO DEVICES. The notification in the system bar is a reminder that as long as the receiving modem is running the microphone or Bluetooth AUDIO IS UNAVAILABLE to other functions including possibly the phone function itself.
+ What does it do?
 
-STOPPING the modem or exiting completely the application VIA THE EXIT FUNCTION IN THE MENU will free the audio input devices.
+Basically most of what the fully featured version on the PC does. 
 
-The screens. Swipping across a screen moves to the next/preceding screen.
+- Receive Flmsg formatted messages (any Form).
 
-1. Terminal: displays properly formatted received data and some debug messages. When a form is received it displays the wrapped form data. The simulate button sends the content of the sample.text file (Received folder) to the modem output. Ensure the modem is off if using this button.
+- Forward any form message as-is over the radio in Flmsg format OR over
+ the internet via email, instant messaging (Facebook, Tweeter, ...) or
+ cloud services (Dropbox, Google drive...), print services (E.g. Google
+ Cloud Print).
 
-A long-press on the received text opens the select/copy to clipboard option.
+- Copy and edit received messages for replying or further forwarding
+ (all custom forms plus the following “hard coded forms”: Blank form,
+ Radiogram, IARU message, Plaintext, CSV, all ICS and HICS forms at
+ present, plus the “Picture Form”).
 
-2. Modem: allows for modem change, squelch level adjustment, modem on/off, tune, display of the waterfall, TX abort. Displays all received characters, the CPU load (top) and the signal quality versus squelch level (bottom).
+- Create new messages using any custom forms or the current set of 
+ "hard coded” forms.
 
-A long-press on the received text opens the select/copy to clipboard option.
+- Send created messages over the radio or internet.
 
-3. Messages are organised in folders: Inbox, Forms (for creating new messages), Templates, Drafts, Outbox, Sent and Logs. Selecting a form or a message is done by long-pressing an entry. 
-The message will be displayed together with the relevant actions for the folder.
+- Define and save templates for facilitating the creation of new
+ messages.
 
-All files are in the <name of sdcard>/NBEMS folder structure on the device.
+- Consult the activity log and the messages as-sent.
 
-If a crash occurs, the app gives you the opportunity to send a crash report via email after reviewing the information supplied.
+- The implemented modems are the FLMSG modems (including extra modes),
+ that is all PSK/PSKR modes, including multi-carrier modes, some of the
+ 8PSK modes, THOR, MFSK, OLIVIA, MT-63 and Domino-Ex modes. The 
+ performance is good as the modems now coded in native C++ code for
+ performance and is heavily based on the Fldigi modems code.
 
 Enjoy.
 

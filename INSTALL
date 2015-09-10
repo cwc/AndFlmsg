@@ -1,0 +1,43 @@
+
+Download the AndFlmsg apk file from the website at:
+
+http://www.w1hkj.com/vk2eta/
+
+And save it to the SD card, either from within the phone or on a PC to
+ which the Android device is connected to and has the USB driver
+ installed for that device to allow access to the SD card content from
+ the PC.
+
+From there use a file explorer to install the .apk file, or on some
+ devices use the notification of the completed download to install.
+
+You have to allow non-Android market application to be installed for
+ this to work. This is found under Settings / Security / 
+ Unknown Sources OR Setting / Applications / Unknown Sources, for 
+ older versions of Android.
+
+You will be asked to accept a series of permissions that are explained
+ below:
+
+a.  Your location: to provide GPS location for Picture forms or provide
+ accurate time when out of cellular range (available but not displayed yet).
+b.  Storage: Read and write to the SD card. For storing and accessing
+ the working files under the "NBEMS.files" directory.
+c.  Your Personnal Information (log data): to allow reporting of the 
+ context of an error in case of an application crash (the user can 
+ decide to send or not the information after reviewing it).
+d.   Network Communication as in Bluetooth and Full Internet access:
+ to allow connection to the Bluetooth handsfree kits or headsets used 
+ as audio interfaces AND to share / Forward messages over the internet.
+e.   Phone calls (as in reading phone status): to disconnect the 
+ Bluetooth interface when AndFlmsg's audio is running through the 
+ Bluetooth interface  AND a phone call comes in. This is to prevent the
+ call's audio from going to the radio.
+f.   Hardware controls (audio settings and recording): required for
+ receiving and transmitting sound. 
+g.   Bluetooth administration: to redirect the sound via a Bluetooth
+ interface. 
+
+In your applications list you should now have an Flmsg logo called
+ AndFlmsg.
+ 
