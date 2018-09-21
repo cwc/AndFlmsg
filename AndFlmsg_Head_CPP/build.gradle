@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    defaultConfig {
+        applicationId "com.AndFlmsg"
+        minSdkVersion 14
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.2.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            ndkBuild {
+                // Specifies the ABI configurations of your native
+                // libraries Gradle should build and package with your APK.
+                abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a',
+                        'arm64-v8a'
+                cFlags "-DHAVE_STRCASESTR", "-DHAVE_UNSETENV", "-Ifldigi/include"
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        ndkBuild {
+            // Provides a relative path to your ndkBuild Android.mk file.
+            path "src/main/cpp/Android.mk"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(path: ':aFileDialog', configuration: 'default')
+    implementation project(path: ':android-support-v7-appcompat', configuration: 'default')
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
