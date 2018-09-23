@@ -109,7 +109,7 @@ public class Modem {
 
     static {
         //Load the C++ modems library
-        System.loadLibrary("stlport_shared");
+        System.loadLibrary("c++_shared");
         System.loadLibrary("AndFlmsg_Modem_Interface");
     }
 
