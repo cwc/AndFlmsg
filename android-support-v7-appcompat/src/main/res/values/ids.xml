@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,13 +13,13 @@
      limitations under the License.
 -->
 <resources>
-    <item type="id" name="home"/>
-    <item type="id" name="up"/>
-    <item type="id" name="action_bar_spinner"/>
-    <item type="id" name="action_bar_activity_content"/>
-    <item type="id" name="split_action_bar"/>
-    <item type="id" name="action_menu_divider"/>
-    <item type="id" name="action_menu_presenter"/>
-    <item type="id" name="progress_circular"/>
-    <item type="id" name="progress_horizontal"/>
+    <item name="home" type="id" />
+    <item name="up" type="id" />
+    <item name="action_bar_spinner" type="id" />
+    <item name="action_bar_activity_content" type="id" />
+    <item name="split_action_bar" type="id" />
+    <item name="action_menu_divider" type="id" />
+    <item name="action_menu_presenter" type="id" />
+    <item name="progress_circular" type="id" />
+    <item name="progress_horizontal" type="id" />
 </resources>

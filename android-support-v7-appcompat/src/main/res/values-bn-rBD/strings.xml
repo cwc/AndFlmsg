@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--  Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="UTF-8"?><!--  Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,8 +13,7 @@
      limitations under the License.
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <string name="abc_action_mode_done" msgid="4076576682505996667">"সম্পন্ন হয়েছে"</string>
     <string name="abc_action_bar_home_description" msgid="4600421777120114993">"হোম এ নেভিগেট করুন"</string>
     <string name="abc_action_bar_up_description" msgid="1594238315039666878">"উপরের দিকে নেভিগেট করুন"</string>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,7 +18,7 @@
     <!-- Like in themes_base.xml, the namespace "Base.AppCompat.*" is used to
          define base styles for the platform version. The "*.AppCompat"
          variants are for direct use or use as parent styles by the app. -->
-    <eat-comment/>
+    <eat-comment />
 
     <style name="Base.Widget.AppCompat.ActionBar" parent="">
         <item name="displayOptions">showTitle</item>
@@ -27,7 +26,8 @@
         <item name="height">?attr/actionBarSize</item>
 
         <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
-        <item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle
+        </item>
 
         <item name="background">@null</item>
         <item name="backgroundStacked">@null</item>
@@ -45,7 +45,8 @@
 
     <style name="Base.Widget.AppCompat.Light.ActionBar" parent="Base.Widget.AppCompat.ActionBar">
         <item name="actionButtonStyle">@style/Widget.AppCompat.Light.ActionButton</item>
-        <item name="actionOverflowButtonStyle">@style/Widget.AppCompat.Light.ActionButton.Overflow</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.AppCompat.Light.ActionButton.Overflow
+        </item>
     </style>
 
     <style name="Base.Widget.AppCompat.ActionBar.Solid">
@@ -91,9 +92,7 @@
         <item name="dividerPadding">8dip</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.ActionBar.TabBar"
-           parent="Base.Widget.AppCompat.ActionBar.TabBar">
-    </style>
+    <style name="Base.Widget.AppCompat.Light.ActionBar.TabBar" parent="Base.Widget.AppCompat.ActionBar.TabBar"></style>
 
     <style name="Base.Widget.AppCompat.ActionBar.TabView" parent="">
         <item name="android:background">@drawable/abc_tab_indicator_material</item>
@@ -120,12 +119,9 @@
         <item name="textAllCaps">true</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.ActionBar.TabText"
-           parent="Base.Widget.AppCompat.ActionBar.TabText">
-    </style>
+    <style name="Base.Widget.AppCompat.Light.ActionBar.TabText" parent="Base.Widget.AppCompat.ActionBar.TabText"></style>
 
-    <style name="Base.Widget.AppCompat.Light.ActionBar.TabText.Inverse"
-           parent="Base.Widget.AppCompat.Light.ActionBar.TabText">
+    <style name="Base.Widget.AppCompat.Light.ActionBar.TabText.Inverse" parent="Base.Widget.AppCompat.Light.ActionBar.TabText">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium.Inverse</item>
     </style>
 
@@ -134,7 +130,8 @@
         <item name="backgroundSplit">?attr/actionModeSplitBackground</item>
         <item name="height">?attr/actionBarSize</item>
         <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionMode.Title</item>
-        <item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle
+        </item>
         <item name="closeItemLayout">@layout/abc_action_mode_close_item_material</item>
     </style>
 
@@ -168,8 +165,7 @@
         <item name="android:textSize">@dimen/abc_text_size_subtitle_material_toolbar</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.ProgressBar.Horizontal" parent="android:Widget.ProgressBar.Horizontal">
-    </style>
+    <style name="Base.Widget.AppCompat.ProgressBar.Horizontal" parent="android:Widget.ProgressBar.Horizontal"></style>
 
     <style name="Base.Widget.AppCompat.ProgressBar" parent="android:Widget.ProgressBar">
         <item name="android:minWidth">@dimen/abc_action_bar_progress_bar_size</item>
@@ -207,7 +203,8 @@
     </style>
 
     <style name="Base.Widget.AppCompat.DropDownItem.Spinner" parent="">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.DropDownItem</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.DropDownItem
+        </item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:gravity">center_vertical</item>
@@ -221,13 +218,11 @@
         <item name="android:divider">@null</item>
     </style>
 
-    <style name="Base.TextAppearance.AppCompat.Widget.DropDownItem"
-           parent="android:TextAppearance.Small">
+    <style name="Base.TextAppearance.AppCompat.Widget.DropDownItem" parent="android:TextAppearance.Small">
         <item name="android:textColor">?android:attr/textColorPrimaryDisableOnly</item>
     </style>
 
-    <style name="Base.TextAppearance.Widget.AppCompat.ExpandedMenu.Item"
-           parent="android:TextAppearance.Medium">
+    <style name="Base.TextAppearance.Widget.AppCompat.ExpandedMenu.Item" parent="android:TextAppearance.Medium">
         <item name="android:textColor">?android:attr/textColorPrimaryDisableOnly</item>
     </style>
 
@@ -254,23 +249,17 @@
         <item name="android:dropDownHorizontalOffset">-4dip</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.PopupMenu" parent="@style/Widget.AppCompat.ListPopupWindow">
-    </style>
+    <style name="Base.Widget.AppCompat.PopupMenu" parent="@style/Widget.AppCompat.ListPopupWindow"></style>
 
-    <style name="Base.Widget.AppCompat.Light.PopupMenu" parent="@style/Widget.AppCompat.ListPopupWindow">
-    </style>
+    <style name="Base.Widget.AppCompat.Light.PopupMenu" parent="@style/Widget.AppCompat.ListPopupWindow"></style>
 
-    <style name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Large" parent="TextAppearance.AppCompat.Menu">
-    </style>
+    <style name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Large" parent="TextAppearance.AppCompat.Menu"></style>
 
-    <style name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Small" parent="TextAppearance.AppCompat.Menu">
-    </style>
+    <style name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Small" parent="TextAppearance.AppCompat.Menu"></style>
 
-    <style name="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Large" parent="TextAppearance.AppCompat.Menu">
-    </style>
+    <style name="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Large" parent="TextAppearance.AppCompat.Menu"></style>
 
-    <style name="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small" parent="TextAppearance.AppCompat.Menu">
-    </style>
+    <style name="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small" parent="TextAppearance.AppCompat.Menu"></style>
 
     <style name="Base.TextAppearance.AppCompat.SearchResult" parent="">
         <item name="android:textStyle">normal</item>
@@ -305,12 +294,13 @@
         <item name="dividerPadding">6dip</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.PopupWindow" parent="android:Widget.PopupWindow">
-    </style>
+    <style name="Base.Widget.AppCompat.PopupWindow" parent="android:Widget.PopupWindow"></style>
 
     <style name="Base.Widget.AppCompat.Toolbar" parent="android:Widget">
         <item name="titleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Title</item>
-        <item name="subtitleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle</item>
+        <item name="subtitleTextAppearance">
+            @style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle
+        </item>
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="titleMargins">4dp</item>
         <item name="maxButtonHeight">56dp</item>
@@ -325,13 +315,9 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
-           parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-    </style>
+    <style name="Base.TextAppearance.Widget.AppCompat.Toolbar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title"></style>
 
-    <style name="Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-           parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-    </style>
+    <style name="Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle"></style>
 
     <style name="Base.Widget.AppCompat.SearchView" parent="android:Widget">
         <item name="layout">@layout/abc_search_view</item>
@@ -437,7 +423,9 @@
     </style>
 
     <style name="Base.Widget.AppCompat.TextView.SpinnerItem" parent="android:Widget.TextView.SpinnerItem">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem</item>
+        <item name="android:textAppearance">
+            @style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem
+        </item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
     </style>

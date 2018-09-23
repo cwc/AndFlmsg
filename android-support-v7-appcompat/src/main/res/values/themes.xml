@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -44,13 +43,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.AppCompat.DialogWhenLarge"
-           parent="Base.Theme.AppCompat.DialogWhenLarge">
-    </style>
+    <style name="Theme.AppCompat.DialogWhenLarge" parent="Base.Theme.AppCompat.DialogWhenLarge"></style>
 
-    <style name="Theme.AppCompat.Light.DialogWhenLarge"
-           parent="Base.Theme.AppCompat.Light.DialogWhenLarge">
-    </style>
+    <style name="Theme.AppCompat.Light.DialogWhenLarge" parent="Base.Theme.AppCompat.Light.DialogWhenLarge"></style>
 
     <style name="Theme.AppCompat.Dialog" parent="Base.Theme.AppCompat.Dialog" />
 
@@ -62,11 +57,13 @@
          two-tone backgrounds. For applications targeting Honeycomb or newer, this is the default
          AlertDialog theme. -->
     <style name="Theme.AppCompat.Dialog.Alert" parent="Base.Theme.AppCompat.Dialog.Alert" />
+
     <style name="Theme.AppCompat.Light.Dialog.Alert" parent="Base.Theme.AppCompat.Light.Dialog.Alert" />
 
     <!-- Variant of Theme.AppCompat.Dialog that has a nice minimum width for
          a regular dialog. -->
     <style name="Theme.AppCompat.Dialog.MinWidth" parent="Base.Theme.AppCompat.Dialog.MinWidth" />
+
     <style name="Theme.AppCompat.Light.Dialog.MinWidth" parent="Base.Theme.AppCompat.Light.Dialog.MinWidth" />
 
     <!-- Menu/item attributes -->

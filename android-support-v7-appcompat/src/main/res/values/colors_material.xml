@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,16 +46,20 @@
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
     <!-- Black 50% -->
     <color name="bright_foreground_disabled_material_light">#80000000</color>
-    <color name="bright_foreground_inverse_material_dark">@color/bright_foreground_material_light</color>
-    <color name="bright_foreground_inverse_material_light">@color/bright_foreground_material_dark</color>
+    <color name="bright_foreground_inverse_material_dark">@color/bright_foreground_material_light
+    </color>
+    <color name="bright_foreground_inverse_material_light">@color/bright_foreground_material_dark
+    </color>
 
     <color name="dim_foreground_material_dark">#ffbebebe</color>
     <color name="dim_foreground_material_light">#ff323232</color>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
 
-    <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
-    <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
+    <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark
+    </color>
+    <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light
+    </color>
 
     <!-- TODO: This is 40% alpha on the default accent color. -->
     <color name="highlighted_text_material_dark">#6680cbc4</color>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +21,8 @@
         theme on a given platform version and should set up the default theme ready for adding our
         unbundled Action Bar.
     -->
-    <eat-comment/>
+    <eat-comment />
+
     <style name="Platform.AppCompat" parent="android:Theme.Material">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
@@ -40,6 +40,7 @@
     </style>
 
     <style name="Base.Theme.AppCompat" parent="Base.V21.Theme.AppCompat" />
+
     <style name="Base.Theme.AppCompat.Light" parent="Base.V21.Theme.AppCompat.Light" />
 
     <style name="Base.V21.Theme.AppCompat" parent="Base.V7.Theme.AppCompat">
@@ -63,13 +64,16 @@
 
         <!-- General view attributes -->
         <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
-        <item name="selectableItemBackgroundBorderless">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="selectableItemBackgroundBorderless">
+            ?android:attr/selectableItemBackgroundBorderless
+        </item>
         <item name="borderlessButtonStyle">?android:borderlessButtonStyle</item>
         <item name="dividerHorizontal">?android:attr/dividerHorizontal</item>
         <item name="dividerVertical">?android:attr/dividerVertical</item>
         <item name="editTextBackground">?android:attr/editTextBackground</item>
         <item name="editTextColor">?android:attr/editTextColor</item>
-        <item name="listChoiceBackgroundIndicator">?android:attr/listChoiceBackgroundIndicator</item>
+        <item name="listChoiceBackgroundIndicator">?android:attr/listChoiceBackgroundIndicator
+        </item>
 
         <!-- Copy the platform default styles for the AppCompat widgets -->
         <item name="autoCompleteTextViewStyle">?android:attr/autoCompleteTextViewStyle</item>
@@ -113,13 +117,16 @@
 
         <!-- General view attributes -->
         <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
-        <item name="selectableItemBackgroundBorderless">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="selectableItemBackgroundBorderless">
+            ?android:attr/selectableItemBackgroundBorderless
+        </item>
         <item name="borderlessButtonStyle">?android:borderlessButtonStyle</item>
         <item name="dividerHorizontal">?android:attr/dividerHorizontal</item>
         <item name="dividerVertical">?android:attr/dividerVertical</item>
         <item name="editTextBackground">?android:attr/editTextBackground</item>
         <item name="editTextColor">?android:attr/editTextColor</item>
-        <item name="listChoiceBackgroundIndicator">?android:attr/listChoiceBackgroundIndicator</item>
+        <item name="listChoiceBackgroundIndicator">?android:attr/listChoiceBackgroundIndicator
+        </item>
 
         <!-- Copy the platform default styles for the AppCompat widgets -->
         <item name="autoCompleteTextViewStyle">?android:attr/autoCompleteTextViewStyle</item>
@@ -151,6 +158,7 @@
     </style>
 
     <style name="Base.Theme.AppCompat.Dialog" parent="Base.V21.Theme.AppCompat.Dialog" />
+
     <style name="Base.Theme.AppCompat.Light.Dialog" parent="Base.V21.Theme.AppCompat.Light.Dialog" />
 
     <style name="Platform.ThemeOverlay.AppCompat.Dark" parent="">

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,7 +18,7 @@
     <!-- Like in themes_base.xml, the namespace "*.AppCompat.Base" is used to
      define base styles for the platform version. The "*.AppCompat"
      variants are for direct use or use as parent styles by the app. -->
-    <eat-comment/>
+    <eat-comment />
 
     <style name="Base.Widget.AppCompat.Spinner" parent="android:Widget.Holo.Spinner">
         <item name="android:background">@drawable/abc_spinner_mtrl_am_alpha</item>
@@ -29,12 +28,8 @@
 
     <!-- Progress Bar -->
 
-    <style name="Base.Widget.AppCompat.ProgressBar.Horizontal"
-           parent="android:Widget.Holo.ProgressBar.Horizontal">
-    </style>
+    <style name="Base.Widget.AppCompat.ProgressBar.Horizontal" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
 
-    <style name="Base.Widget.AppCompat.ProgressBar"
-           parent="android:Widget.Holo.ProgressBar">
-    </style>
+    <style name="Base.Widget.AppCompat.ProgressBar" parent="android:Widget.Holo.ProgressBar"></style>
 
 </resources>

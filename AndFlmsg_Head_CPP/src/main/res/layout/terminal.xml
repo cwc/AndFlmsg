@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/termscreen"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:weightSum="1" 
-	android:id="@+id/termscreen" >
+    android:weightSum="1">
 
-        <TextView
-            android:id="@+id/minsec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:00"
-            android:textSize="30sp" >
+    <TextView
+        android:id="@+id/minsec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="30sp">
 
-        </TextView>
-	
+    </TextView>
+
     <ScrollView
         android:id="@+id/terminalscrollview"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.00" >
+        android:layout_weight="1.00">
 
         <TextView
-            android:textIsSelectable="true"
             android:id="@+id/terminalview"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.00"
-            android:text="Terminal Screen" >
-        </TextView>
+            android:text="Terminal Screen"
+            android:textIsSelectable="true"></TextView>
     </ScrollView>
 
 
@@ -37,7 +36,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.08"
-        android:weightSum="1" >
+        android:weightSum="1">
 
         <EditText
             android:id="@+id/edit_text_out"
@@ -45,9 +44,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.72"
             android:maxLines="3"
-            android:textSize="10pt" >
-            <requestFocus >
-            </requestFocus>
+            android:textSize="10pt">
+
+            <requestFocus></requestFocus>
         </EditText>
 
         <Button
@@ -56,9 +55,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="fill_vertical"
             android:layout_weight="0.14"
-            android:text="SEND TEXT" >
+            android:text="SEND TEXT">
 
         </Button>
-        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

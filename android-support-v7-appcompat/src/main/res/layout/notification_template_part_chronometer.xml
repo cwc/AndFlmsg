@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2015 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +14,14 @@
   ~ limitations under the License
   -->
 
-<Chronometer android:id="@+id/chronometer" xmlns:android="http://schemas.android.com/apk/res/android"
-    android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Time"
+<Chronometer xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chronometer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_weight="0"
-    android:singleLine="true"
     android:gravity="center"
     android:paddingLeft="8dp"
     android:paddingStart="8dp"
-    />
+    android:singleLine="true"
+    android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Time" />

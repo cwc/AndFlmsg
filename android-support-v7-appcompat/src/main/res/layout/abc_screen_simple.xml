@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2013 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,20 +13,19 @@
      limitations under the License.
 -->
 
-<android.support.v7.internal.widget.FitWindowsLinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.internal.widget.FitWindowsLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/action_bar_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <android.support.v7.internal.widget.ViewStubCompat
         android:id="@+id/action_mode_bar_stub"
-        android:inflatedId="@+id/action_mode_bar"
-        android:layout="@layout/abc_action_mode_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inflatedId="@+id/action_mode_bar"
+        android:layout="@layout/abc_action_mode_bar" />
 
     <include layout="@layout/abc_screen_content_include" />
 

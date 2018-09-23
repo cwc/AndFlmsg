@@ -1,30 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/mailscreen"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:weightSum="1"
-	android:id="@+id/mailscreen" >
-    <ListView android:layout_width="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <ListView
+        android:id="@+id/maillist"
+        android:layout_width="fill_parent"
+        android:layout_height="298dp"
+        android:layout_weight="0.82"
         android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll"
-        android:id="@+id/maillist" android:layout_height="298dp" android:layout_weight="0.82"/>
-    <LinearLayout android:id="@+id/FrameLayout3" android:layout_width="fill_parent" 
-    android:layout_height="50dp" android:layout_weight="0.08" android:weightSum="1">
-        <Button android:id="@+id/button_inbox" android:text="Inbox" android:layout_height="fill_parent" android:layout_weight="0.25" android:layout_width="fill_parent"></Button>
-        <Button android:id="@+id/button_forms" android:text="Compose" android:layout_height="fill_parent" android:layout_weight="0.25" android:layout_width="fill_parent"></Button>
-        <Button android:id="@+id/button_templates" android:text="Templates" android:layout_height="fill_parent" android:layout_weight="0.25" android:layout_width="fill_parent"></Button>
-        <Button android:id="@+id/button_drafts" android:text="Drafts" android:layout_height="fill_parent" android:layout_weight="0.25" android:layout_width="fill_parent"></Button>
-        </LinearLayout>
-    <LinearLayout android:id="@+id/FrameLayout4" android:layout_width="fill_parent" 
-    android:layout_height="50dp" android:layout_weight="0.08" android:weightSum="1">
-        <Button android:id="@+id/button_outbox" android:text="Outbox" android:layout_height="fill_parent" android:layout_weight="0.25" android:layout_width="fill_parent"></Button>
-        <Button android:id="@+id/button_sentitems" android:text="Sent" android:layout_height="fill_parent" android:layout_weight="0.25" android:layout_width="fill_parent"></Button>
-        <Button android:id="@+id/button_logs" android:text="Logs" android:layout_height="fill_parent" android:layout_weight="0.25" android:layout_width="fill_parent"></Button>
-        <Button android:id="@+id/button_sendall" android:text="Send All Messages" android:layout_height="fill_parent" android:enabled="false" android:layout_weight="0.25" android:layout_width="fill_parent"></Button>
+        android:transcriptMode="alwaysScroll" />
+
+    <LinearLayout
+        android:id="@+id/FrameLayout3"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_weight="0.08"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/button_inbox"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
+            android:text="Inbox"></Button>
+
+        <Button
+            android:id="@+id/button_forms"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
+            android:text="Compose"></Button>
+
+        <Button
+            android:id="@+id/button_templates"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
+            android:text="Templates"></Button>
+
+        <Button
+            android:id="@+id/button_drafts"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
+            android:text="Drafts"></Button>
     </LinearLayout>
-    <LinearLayout android:id="@+id/FrameLayout5" android:layout_width="fill_parent" 
-    android:layout_height="5dp" android:layout_weight="0.08" android:weightSum="1" android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/FrameLayout4"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_weight="0.08"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/button_outbox"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
+            android:text="Outbox"></Button>
+
+        <Button
+            android:id="@+id/button_sentitems"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
+            android:text="Sent"></Button>
+
+        <Button
+            android:id="@+id/button_logs"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
+            android:text="Logs"></Button>
+
+        <Button
+            android:id="@+id/button_sendall"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
+            android:enabled="false"
+            android:text="Send All Messages"></Button>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/FrameLayout5"
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:layout_weight="0.08"
+        android:orientation="horizontal"
+        android:weightSum="1"></LinearLayout>
 </LinearLayout>

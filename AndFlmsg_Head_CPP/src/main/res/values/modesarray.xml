@@ -38,7 +38,7 @@
         <item>OLIVIA_8_250</item>
         <item>OLIVIA_4_250</item>
     </string-array>
-        
+
     <integer-array name="modesValues">
         <item>7</item>
         <item>8</item>

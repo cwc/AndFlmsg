@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -26,15 +25,15 @@
 
     <!-- The platform's desired fixed width for a dialog along the major axis
          (the screen is in landscape). This may be either a fraction or a dimension.-->
-    <item type="dimen" name="dialog_fixed_width_major">50%</item>
+    <item name="dialog_fixed_width_major" type="dimen">50%</item>
     <!-- The platform's desired fixed width for a dialog along the minor axis
          (the screen is in portrait). This may be either a fraction or a dimension.-->
-    <item type="dimen" name="dialog_fixed_width_minor">70%</item>
+    <item name="dialog_fixed_width_minor" type="dimen">70%</item>
     <!-- The platform's desired fixed height for a dialog along the major axis
          (the screen is in portrait). This may be either a fraction or a dimension.-->
-    <item type="dimen" name="dialog_fixed_height_major">60%</item>
+    <item name="dialog_fixed_height_major" type="dimen">60%</item>
     <!-- The platform's desired fixed height for a dialog along the minor axis
          (the screen is in landscape). This may be either a fraction or a dimension.-->
-    <item type="dimen" name="dialog_fixed_height_minor">90%</item>
+    <item name="dialog_fixed_height_minor" type="dimen">90%</item>
 
 </resources>
