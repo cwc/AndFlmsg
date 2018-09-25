@@ -242,6 +242,7 @@ public class AndFlmsg extends AppCompatActivity {
     private static final int PICTURE_REQUEST_CODE = 10404;
     //Temp picture attachment
     private static final String tempAttachPictureFname = "_imgCameraAttachment.pic";
+    private static final String ACTION_EXIT_APP = "com.AndFlmsg.action.exit_app";
     public static Context myContext;
     public static Window myWindow = null;
     public static boolean RXParamsChanged = false;
@@ -1108,6 +1109,8 @@ public class AndFlmsg extends AppCompatActivity {
                     //if you know the file name, better to check if the file is actually there
                     // - make sure this disconnection not initiated for any other reason.
                     topToastText("BT Disconnected");
+                } else if (action.equals(ACTION_EXIT_APP)) {
+                    exitApp();
                 } else {
                     topToastText("Other Action");
                 }
@@ -1118,6 +1121,7 @@ public class AndFlmsg extends AppCompatActivity {
         //Bluetooth File transfers (Receiving listener)
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter.addAction(ACTION_EXIT_APP);
         //Not called filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         this.registerReceiver(mReceiver, filter);
 
@@ -1261,12 +1265,15 @@ public class AndFlmsg extends AppCompatActivity {
             }
         } else { // start if not ON yet AND we haven't paused the modem manually
             if (!ProcessorON && !modemPaused) {
-                //New code using the Support Library
+                Intent exitIntent = new Intent(ACTION_EXIT_APP, null);
+                PendingIntent exitPendingIntent = PendingIntent.getBroadcast(this, 0, exitIntent, 0);
+
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.drawable.notificationicon)
                                 .setContentTitle("Modem ON")
                                 .setContentText("Fdigi Modem ON, Microphone/Bluetooth in use by Modem")
+                                .addAction(R.drawable.ic_launcher, getString(R.string.exit), exitPendingIntent)
                                 .setOngoing(true);
 
                 // Creates an explicit intent for an Activity in your app
@@ -1704,40 +1711,52 @@ public class AndFlmsg extends AppCompatActivity {
                 myAlertDialog.show();
                 break;
             case R.id.exit:
-                myAlertDialog.setMessage("Are you sure you want to Exit?");
-                myAlertDialog.setCancelable(false);
-                myAlertDialog.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // Toast.makeText(this, "GoodBye", Toast.LENGTH_SHORT).show();
-                                // Stop the Modem and Listening Service
-                                if (ProcessorON) {
-                                    stopService(new Intent(AndFlmsg.this,
-                                            Processor.class));
-                                    ProcessorON = false;
-                                }
-                                // Stop the GPS if running
-                                if (locationManager != null) {
-                                    locationManager.removeUpdates(locationListener);
-                                }
-                                // Close that activity and return to previous screen
-                                finish();
-                                // Kill the process
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                            }
-                        });
-                myAlertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                myAlertDialog.show();
+                showExitAppDialog();
                 break;
             case R.id.About:
                 displayAbout();
                 break;
         }
         return true;
+    }
+
+    private void showExitAppDialog() {
+        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(AndFlmsg.this);
+
+        myAlertDialog.setMessage("Are you sure you want to Exit?");
+        myAlertDialog.setCancelable(false);
+        myAlertDialog.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        exitApp();
+                    }
+                });
+        myAlertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        myAlertDialog.show();
+    }
+
+    private void exitApp() {
+        // Toast.makeText(this, "GoodBye", Toast.LENGTH_SHORT).show();
+        // Stop the Modem and Listening Service
+        if (ProcessorON) {
+            stopService(new Intent(AndFlmsg.this,
+                    Processor.class));
+            ProcessorON = false;
+        }
+
+        // Stop the GPS if running
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
+        }
+
+        finish();
+
+        // Kill the process
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     // Display the Terminal layout and associate it's buttons

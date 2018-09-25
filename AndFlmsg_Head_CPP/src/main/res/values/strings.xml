@@ -5,4 +5,5 @@
     <string name="hello">Hello</string>
     <string name="crash_toast_text">Please send crash information email to the author to help with problem correction. Thanks and 73.</string>
     <string name="arlmessage">Arl Message</string>
+    <string name="exit">Exit</string>
 </resources>
