@@ -3337,6 +3337,14 @@ public class AndFlmsg extends AppCompatActivity {
         myModemTV = (TextView) findViewById(R.id.modemview);
         myModemTV.setHorizontallyScrolling(false);
         myModemTV.setTextSize(16);
+        myModemTV.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ModemBuffer = "";
+                myModemTV.setText(ModemBuffer);
+                return true;
+            }
+        });
 
         //Allow select/copy
         if (android.os.Build.VERSION.SDK_INT >= 11) {
